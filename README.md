@@ -57,7 +57,7 @@ RewriteMap access txt:/var/www/blocked_ips.conf
    </RequireAll>
 </Location>
 
-ErrorDocument 403 "<h3>Unusual activity has been detected from this IP address.</h3><p>As a consequence, access has been denied.</p><p>If you believe this is a mistake please contact me directly.</p>
+ErrorDocument 403 ""<h3>Unusual activity has been detected from this IP address.</h3><p>As a consequence, access has been denied.</p><p>If you believe this is a mistake please contact me directly.</p>""
 `
 
 Was passiert hier? Zunächst erzeugen wir eine RewriteMap. Das bedeutet, dass wir in den HTACCESS Dateien unserer VirtualHosts darauf zugreifen können.
