@@ -29,9 +29,16 @@ Die vHost Configs liegen idR. unter folgendem Pfad:
 /etc/apache2/sites-available
 
 Hier muss im VirtualHost Knoten des Dokuments folgender Eintrag hinterlegt werden:
+
+`
 CustomLog "|<PfadZuPython> <PfadZuFirewall.py>" combined
+`
+
 in meinem Fall z.B.:
+
+`
 CustomLog "|/usr/bin/python3 /home/ubuntu/logfirewall.py" combined
+`
 
 Das führt dazu, dass neue Logeinträge an die logfirewall.py gepiped werden.
 
@@ -40,9 +47,9 @@ Die Apache2 Config muss ebenfalls angepasst werden.
 Diese befindet sich bei mir unter /etc/apache2/apache2.conf
 
 Folgende Einträge müssen am Ende hinzugefügt werden (und die Pfade ggfs. angepasst werden):
-´´´
-RewriteMap access txt:/var/www/blocked_ips.conf
 
+`
+RewriteMap access txt:/var/www/blocked_ips.conf
 <Location />
    <RequireAll>
       Require all granted
@@ -51,7 +58,7 @@ RewriteMap access txt:/var/www/blocked_ips.conf
 </Location>
 
 ErrorDocument 403 "<h3>Unusual activity has been detected from this IP address.</h3><p>As a consequence, access has been denied.</p><p>If you believe this is a mistake please contact me directly.</p>
-´´´
+`
 
 Was passiert hier? Zunächst erzeugen wir eine RewriteMap. Das bedeutet, dass wir in den HTACCESS Dateien unserer VirtualHosts darauf zugreifen können.
 In der Datei "/var/www/blocked_ips.conf" stehen später die IP Adressen, welche von der HTACCESS Datei blockiert werden sollen.
@@ -63,10 +70,11 @@ Daher ist zusätzlich die Blockierung über HTACCESS Dateien notwendig (gibt es 
 ### HTACCESS Datei der Webseite
 Der Apache Server kann IP-Blacklists integrieren. Allerdings werden Änderungen der Blacklist nicht sofort übernommen sondern erst nach einem Neustart des Servers. Um sofort auf schädliches Verhalten zu reagieren muss (ich bin offen für elegantere Vorschläge) in der HTACCESS Datei aller Virtual Hosts (oder auf globaler Ebene) folgender Eintrag hinterlegt sein:
 
+`
 RewriteEngine On
 RewriteCond ${access:%{REMOTE_ADDR}} deny [NC]
 RewriteRule ^ - [L,F]
-
+`
 ## Was passiert jetzt?
 Die Logfirewall ist aktuell sehr trivial und auf meine Bedürfnisse angepasst.
 Aktuell wird nach 10 fehlgeschlagenen HTTP Requests (404 Response) der Nutzer blockiert.
