@@ -2,6 +2,7 @@ import re
 
 class MaliciousStringAnalyzer:
     def __init__(self, blacklistedStringsPath):
+        self.Name = "MaliciousStringAnalyzer"
         self.ReadMaliciousStrings(blacklistedStringsPath)
         self.logPattern = re.compile(r'^\[(.*?)\] \[(.*?)\] \[pid (.*?)\] \[client (.*?)\] (.*)')
 
@@ -21,5 +22,6 @@ class MaliciousStringAnalyzer:
         if match:
             timestamp, log_level, pid, ip, message = match.groups()
             if self.containsSubstring(logline, self.blacklistedStrings):
+                ip, port = ip.split(':')
                 return True, ip
         return False, False
