@@ -1,12 +1,8 @@
-import sys
-import select
-import logging
-import os
-from logging.handlers import RotatingFileHandler
 from Analyzers.ResourceNotFoundAnalyzer import ResourceNotFoundAnalyzer
 from Analyzers.MaliciousStringAnalyzer import MaliciousStringAnalyzer
 from Protectors.BlockApache import BlockApache
 from Protectors.BlockHtaccess import BlockHtaccess
+from Protectors.BlockFromIPTables import BlockFromIPTables
 from Logfirewall import Logfirewall
 
 pathToAuditlog = "/home/ubuntu/firewall/auditlog.db"
@@ -25,7 +21,8 @@ if __name__ == "__main__":
         ],
         [
             BlockHtaccess(pathToBlockHtaccess),
-            BlockApache(pathToApacheBlacklist)
+            BlockApache(pathToApacheBlacklist),
+            BlockFromIPTables()
         ]
     )
 
